@@ -1,0 +1,61 @@
+@model Forum.ViewModels.TopicIndexViewModel
+
+<h2>Темы форума</h2>
+<table>
+    <thead>
+<tr>
+    <th>Тема</th>
+    <th>Дата создания</th>
+    <th>Автор</th>
+    <th>Ответов</th>
+</tr>
+
+</thead>
+<tbody>
+@foreach (var topic in Model.Topics)
+{
+    <tr>
+        <td>
+            <a asp-action="Details" asp-route-id="@topic.Id">
+                @topic.Title
+            </a>
+        </td>
+        <td>
+            <a asp-action="Details" asp-route-id="@topic.Id">
+                @topic.CreatedAt
+            </a>
+        </td>
+        <td>
+            <a asp-action="Details" asp-route-id="@topic.Id">
+                @topic.User.UserName
+            </a>
+        </td>
+        <td>
+            <a asp-action="Details" asp-route-id="@topic.Id">
+                @topic.Messages.Count
+            </a>
+        </td>
+    </tr>
+}
+</tbody>
+</table>
+@if (Model.PageViewModel.HasPreviousPage)
+{
+    <a asp-action="Index" asp-route-page="@(Model.PageViewModel.PageNumber-1)" class="btn btn-outline-success">Previous</a>
+}
+@for (int i = 1; i <= Model.PageViewModel.TotalPages; i++)
+{
+    if (i == Model.PageViewModel.PageNumber)
+    {
+        <span class="btn btn-success">@i</span>
+    }
+    else
+    {
+        <a asp-action="Index" asp-route-page="@i" class="btn btn-outline-success">@i</a>
+    }
+}
+@if (Model.PageViewModel.HasNextPage)
+{
+    <a asp-action="Index" asp-route-page="@(Model.PageViewModel.PageNumber+1)" class="btn btn-outline-success">Next</a>
+   
+}

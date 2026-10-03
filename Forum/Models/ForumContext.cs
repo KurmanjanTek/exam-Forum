@@ -7,7 +7,8 @@ namespace Forum.Models;
 public class ForumContext: IdentityDbContext<User, IdentityRole<int>, int>
 {
     private DbSet<User> Users { get; set; }
-    
+    public DbSet<Topic> Topics { get; set; }
+    public DbSet<Message> Messages { get; set; }
     
     public ForumContext(DbContextOptions<ForumContext> options) : base(options) {}
 }

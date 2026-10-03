@@ -1,5 +1,6 @@
 using Forum.Models;
 using Forum.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -110,6 +111,13 @@ public class AccountController: Controller
     {
         await _signInManager.SignOutAsync();
         return RedirectToAction("Login");
+    }
+
+    [Authorize]
+    public async Task<ActionResult> Profile()
+    {
+        var user = await _userManager.GetUserAsync(User);
+        return View(user);
     }
 
 }
