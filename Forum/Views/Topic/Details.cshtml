@@ -10,14 +10,45 @@
 <hr />
 
 <h3>Сообщения</h3>
-
-@foreach (var message in Model.Messages)
-{
+<div id="messages">
+    @foreach (var message in Model.Messages)
+    {
     <div>
-        <strong>@message.User.UserName</strong>
-        <p>@message.Text</p>
-        <small>@message.CreatedAt</small>
-    </div>
-    <hr />
+            <strong>@message.User.UserName</strong>
+            <p>@message.Text</p>
+            <small>@message.CreatedAt</small>
+        </div>
+        <hr />
+        }
+</div>
+
+<textarea id="messageText"></textarea>
+<button id="sendMessage">Отправить</button>
+
+@section Scripts
+{
+    <script>
+        $("#sendMessage").click(function () {
+            $.ajax({
+                url: '@Url.Action("Create", "Message")',
+                type: 'POST',
+                data: { Text: $("#messageText").val(),
+                TopicId:@Model.Id
+                },
+                success: function (result) {
+                    $("#messages").append( 
+                        "<div>" + 
+                        "<strong>" + result.userName + "</strong>" + 
+                        "<p>" + result.text + "</p>" +
+                        "<small>" + result.createdAt + "</small>" + 
+                        "</div><hr>" );
+                    $("#messageText").val("");
+                    
+                    window.scrollTo(0, document.body.csrollHeight);
+                }
+            }); 
+        })
+    
+    </script>
 }
 
