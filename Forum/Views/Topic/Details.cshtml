@@ -1,5 +1,36 @@
 @model Topic
 
+<style>
+    .message {
+        border-bottom: 1px solid #ddd;
+        padding: 15px 0;
+    }
+
+    .message-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .avatar {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .message-date {
+        margin-left: auto;
+        color: gray;
+        font-size: 14px;
+    }
+
+    .message-text {
+        margin-left: 55px;
+        margin-top: 8px;
+    }
+</style>
+
 <h2>@Model.Title</h2>
 
 <p>@Model.Content</p>
@@ -10,21 +41,31 @@
 <hr />
 
 <h3>Сообщения</h3>
-<div id="messages">
-    @foreach (var message in Model.Messages)
-    {
-    <div>
+ 
+@foreach (var message in Model.Messages)
+{
+    <div class="message">
+        <div class="message-left">
+            <img src="@message.User.Avatar"
+                 alt="avatar"
+                 class="avatar"/>
+
             <strong>@message.User.UserName</strong>
-            <p>@message.Text</p>
-            <small>@message.CreatedAt</small>
         </div>
-        <hr />
-        }
-</div>
+        <div class="message-right">
+            <div class="message-date">
+                @message.CreatedAt
+            </div>
+            <div class="message-text">
+                @message.Text
+            </div>
+        </div>
+    </div>
+}
 
 <textarea id="messageText"></textarea>
 <button id="sendMessage">Отправить</button>
-
+<button id="replyButton">Ответить</button>
 @section Scripts
 {
     <script>
@@ -48,6 +89,10 @@
                 }
             }); 
         })
+        
+        $("#replyButton").click(function () {
+            document.getElementById("messageText").scrollIntoView();
+        });
     
     </script>
 }
