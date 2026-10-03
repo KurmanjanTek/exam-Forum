@@ -53,4 +53,21 @@ public class TopicController :Controller
 
         return RedirectToAction("Index");
     }
+    
+    public async Task<IActionResult> Details(int id)
+    { 
+        var topic = await _context.Topics .Include(t => t.User)
+            .Include(t => t.Messages) .ThenInclude(m => m.User) 
+            .FirstOrDefaultAsync(t => t.Id == id);
+        if (topic == null)
+        {
+            return NotFound();
+        }
+
+        topic.Messages = topic.Messages
+            .OrderBy(m => m.CreatedAt)
+            .ToList();
+
+        return View(topic);
+    }
 }

@@ -1,0 +1,23 @@
+@model Topic
+
+<h2>@Model.Title</h2>
+
+<p>@Model.Content</p>
+
+<p>Автор: @Model.User.UserName</p>
+<p>Дата создания: @Model.CreatedAt</p>
+
+<hr />
+
+<h3>Сообщения</h3>
+
+@foreach (var message in Model.Messages)
+{
+    <div>
+        <strong>@message.User.UserName</strong>
+        <p>@message.Text</p>
+        <small>@message.CreatedAt</small>
+    </div>
+    <hr />
+}
+
