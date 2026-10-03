@@ -1,0 +1,47 @@
+@model Forum.ViewModels.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h2>Регистрация нового пользователя</h2>
+
+<form method="post" asp-controller="Account" asp-action="Register" enctype="multipart/form-data">
+
+    <div asp-validation-summary="ModelOnly"></div>
+    <div>
+        <label asp-for="UserName"></label><br />
+        <input asp-for="UserName" />
+        <span asp-validation-for="UserName"></span>
+    </div>
+    <div>
+        <label asp-for="Email"></label><br />
+        <input asp-for="Email" />
+        <span asp-validation-for="Email"></span>
+    </div>
+    <div>
+        <label asp-for="Avatar" ></label>
+        <input asp-for="Avatar" type="file"  />
+        <span asp-validation-for="Avatar"></span>
+    </div>
+    <div>
+        <label asp-for="Password" ></label> <br/>
+        <input asp-for="Password" type="password" id="password"/>
+        <span asp-validation-for="Password"></span>
+    </div>
+    
+    <div>
+        <label asp-for="PasswordConfirm"></label><br />
+        <input asp-for="PasswordConfirm" />
+        <span asp-validation-for="PasswordConfirm"></span>
+    </div>
+   
+    <div>
+        <input type="submit" value="Регистрация" />
+    </div>
+
+</form>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
