@@ -54,7 +54,7 @@ public class TopicController :Controller
         return RedirectToAction("Index");
     }
     
-    public async Task<IActionResult> Details(int id)
+    public async Task<IActionResult> Details(int id, int page=1)
     { 
         var topic = await _context.Topics .Include(t => t.User)
             .Include(t => t.Messages) .ThenInclude(m => m.User) 
@@ -67,7 +67,20 @@ public class TopicController :Controller
         topic.Messages = topic.Messages
             .OrderBy(m => m.CreatedAt)
             .ToList();
+        
+        int pageSize = 3;
+        var count=topic.Messages.Count();
+        var items=topic.Messages.Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+        PageViewModel pvm = new PageViewModel(count, page, pageSize);
+        MessagePageViewModel mpvm = new MessagePageViewModel()
+        {
+            Topic=topic,
+            Messages = items,
+            PageViewModel = pvm
+        };
+        return View(mpvm);
 
-        return View(topic);
     }
 }

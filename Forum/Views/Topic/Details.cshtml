@@ -1,16 +1,11 @@
-@model Topic
+@model Forum.ViewModels.MessagePageViewModel
 
 <style>
     .message {
         border-bottom: 1px solid #ddd;
         padding: 15px 0;
     }
-
-    .message-header {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
+    
 
     .avatar {
         width: 45px;
@@ -31,12 +26,12 @@
     }
 </style>
 
-<h2>@Model.Title</h2>
+<h2>@Model.Topic.Title</h2>
 
-<p>@Model.Content</p>
+<p>@Model.Topic.Content</p>
 
-<p>Автор: @Model.User.UserName</p>
-<p>Дата создания: @Model.CreatedAt</p>
+<p>Автор: @Model.Topic.User.UserName</p>
+<p>Дата создания: @Model.Topic.CreatedAt</p>
 
 <hr />
 
@@ -74,7 +69,7 @@
                 url: '@Url.Action("Create", "Message")',
                 type: 'POST',
                 data: { Text: $("#messageText").val(),
-                TopicId:@Model.Id
+                TopicId:@Model.Topic.Id
                 },
                 success: function (result) {
                     $("#messages").append( 
@@ -96,4 +91,25 @@
     
     </script>
 }
-
+@if (Model.PageViewModel.HasPreviousPage)
+{
+    <a asp-action="Details" asp asp-route-id="@Model.Topic.Id" asp-route-page="@(Model.PageViewModel.PageNumber-1)" class="btn btn-outline-success">Previous</a>
+}
+@for (int i = 1; i <= Model.PageViewModel.TotalPages; i++)
+{
+    if (i == Model.PageViewModel.PageNumber)
+    {
+        <span class="btn btn-success">@i</span>
+    }
+    else
+    {
+        <a asp-action="Details" asp-route-id="@Model.Topic.Id" 
+           asp-route-page="@i" class="btn btn-outline-success">@i</a>
+    }
+}
+@if (Model.PageViewModel.HasNextPage)
+{
+    <a asp-action="Details"
+       asp-route-id="@Model.Topic.Id" asp-route-page="@(Model.PageViewModel.PageNumber+1)" class="btn btn-outline-success">Next</a>
+   
+}
